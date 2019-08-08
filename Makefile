@@ -1,6 +1,6 @@
 MODULES=$(patsubst %.m,%,$(wildcard *.m))
 GRADE=hlc.gc
-OPT=-O6
+OPT=-O4 --intermodule-optimization
 
 all:: getr
 
