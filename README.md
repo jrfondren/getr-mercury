@@ -1,5 +1,5 @@
 # getrusage() wrapper
-- known to work on Linux
+- known to work on Linux (and Termux on Android, if using fork&exec)
 - created as my simple "time for x in {1..100}; ..." benchmarks were a lot less pleasant on OpenBSD.
 
 ## Mercury notes
@@ -9,6 +9,7 @@
 ## build
 ```
 make
+make fork  # build fork&exec version
 ```
 
 ## usage and examples
@@ -52,7 +53,6 @@ invol ctx switches : 6
 
 ## defects and room for improvement
 - output is in an ad-hoc text format that machine consumers would need to parse manually
-- only `posix_spawn` is used, but fork&exec might be preferred for timings more like a fork&exec-using application
 - this command lacks a manpage
 - 'getr' is probably a poor name
 - kB and ms are always used even when number ranges might be easier to understand in MB or s, or GB or min:s

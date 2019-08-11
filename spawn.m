@@ -26,7 +26,11 @@
 :- pragma foreign_decl("C", "
 #include <sys/types.h>
 #include <sys/wait.h>
+#ifdef GETR_FORKEXEC
+#include <unistd.h>
+#else
 #include <spawn.h>
+#endif
 #ifdef __APPLE__
 #include <crt_externs.h>
 #endif
@@ -55,8 +59,13 @@ benchmark(N, Command, Args, !IO) :-
         Args = MR_list_tail(Args);
     }
     for (int i = 0; i < Count; i++) {
+#ifdef GETR_FORKEXEC
+        if (Pid = fork()) waitpid(Pid, NULL, 0);
+        else execvp(Command, args);
+#else
         posix_spawnp(&Pid, Command, NULL, NULL, args, environ);
         waitpid(Pid, NULL, 0);
+#endif
     }
     free(args);
 ").
@@ -77,7 +86,11 @@ benchmark(N, Command, Args, !IO) :-
         args[i+1] = (char*) MR_list_head(Args);
         Args = MR_list_tail(Args);
     }
+#ifdef GETR_FORKEXEC
+    if (!(pid = fork())) execvp(Command, args);
+#else
     posix_spawnp(&pid, Command, NULL, NULL, args, environ);
+#endif
     free(args);
     Pid = pid;
 ").
