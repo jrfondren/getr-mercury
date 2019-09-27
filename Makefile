@@ -1,10 +1,11 @@
-MODULES=$(patsubst %.m,%,$(wildcard *.m))
+MODULES=getr rusage spawn
+DEPS=$(patsubst %,%.m,$(MODULES))
 GRADE=hlc.gc
 OPT=-O4 --intermodule-optimization
 
 all:: getr
 
-fork:: getr.m rusage.m spawn.m
+fork:: $(DEPS)
 	mmc $(OPT) --grade $(GRADE) --cflags -DGETR_FORKEXEC --make getr
 
 clean::
@@ -12,5 +13,5 @@ clean::
 	rm -rf Mercury
 	rm -fv getr
 
-getr: getr.m rusage.m spawn.m
+getr: $(DEPS)
 	mmc $(OPT) --grade $(GRADE) --make $@
