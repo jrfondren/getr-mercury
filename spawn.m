@@ -60,7 +60,7 @@ benchmark(N, Command, Args, !IO) :-
     }
     for (int i = 0; i < Count; i++) {
 #ifdef GETR_FORKEXEC
-        if (Pid = fork()) waitpid(Pid, NULL, 0);
+        if ((Pid = fork())) waitpid(Pid, NULL, 0);
         else execvp(Command, args);
 #else
         posix_spawnp(&Pid, Command, NULL, NULL, args, environ);
