@@ -15,44 +15,33 @@ make fork  # build fork&exec version
 ## usage and examples
 ```
 $ getr 1000 ./fizzbuzz >/dev/null
-User time      : 0 s, 283052 us
-System time    : 0 s, 127471 us
-Time           : 410 ms (0.410 ms/per)
-Max RSS        : 5608 kB
-Page reclaims  : 65309
+User time      : 0 s, 717132 us
+System time    : 0 s, 760456 us
+Time           : 1477 ms (1.477 ms/per)
+Max RSS        : 6.0 MB
+Page reclaims  : 481577
 Page faults    : 0
 Block inputs   : 0
 Block outputs  : 0
-vol ctx switches   : 998
-invol ctx switches : 17
+vol ctx switches   : 1000
+invol ctx switches : 40
 
-$ getr 100 $(which python3) -c ''
-User time      : 1 s, 450814 us
-System time    : 0 s, 290732 us
-Time           : 1741 ms (17.410 ms/per)
-Max RSS        : 8704 kB
-Page reclaims  : 98102
+$ getr 100 python3 -c ''
+User time      : 1 s, 254026 us
+System time    : 0 s, 258217 us
+Time           : 1512 ms (15.120 ms/per)
+Max RSS        : 8.2 MB
+Page reclaims  : 99141
 Page faults    : 0
 Block inputs   : 0
 Block outputs  : 0
-vol ctx switches   : 103
-invol ctx switches : 10
+vol ctx switches   : 100
+invol ctx switches : 8
 
-$ getr 100 $(which perl) -le ''
-User time      : 0 s, 84307 us
-System time    : 0 s, 62373 us
-Time           : 146 ms (1.460 ms/per)
-Max RSS        : 5648 kB
-Page reclaims  : 22159
-Page faults    : 0
-Block inputs   : 0
-Block outputs  : 0
-vol ctx switches   : 103
-invol ctx switches : 6
+$ getr -b 15.120 100 perl -le ''
+| 0.085x | 1.280 ms | 5.9 MB |
 ```
 
 ## defects and room for improvement
 - output is in an ad-hoc text format that machine consumers would need to parse manually
-- this command lacks a manpage
 - 'getr' is probably a poor name
-- kB and ms are always used even when number ranges might be easier to understand in MB or s, or GB or min:s
