@@ -9,7 +9,7 @@
             user_usec :: int,
             system_sec :: int,
             system_usec :: int,
-            max_rss :: int,
+            max_rss :: float,
             minor_faults :: int,
             major_faults :: int,
             in_blocks :: int,
@@ -35,7 +35,7 @@ getrusage(Who, usage(USec, UUsec, SSec, SUSec, MaxRSS, MinFlt, MajFlt, InBlock, 
     children - "RUSAGE_CHILDREN"
 ]).
 
-:- pred c_getrusage(who, int, int, int, int, int, int, int, int, int, int, int, io, io).
+:- pred c_getrusage(who, int, int, int, int, float, int, int, int, int, int, int, io, io).
 :- mode c_getrusage(in, out, out, out, out, out, out, out, out, out, out, out, di, uo) is det.
 :- pragma foreign_proc("C",
     c_getrusage(
@@ -54,7 +54,11 @@ getrusage(Who, usage(USec, UUsec, SSec, SUSec, MaxRSS, MinFlt, MajFlt, InBlock, 
     UUsec = usage.ru_utime.tv_usec;
     SSec = usage.ru_stime.tv_sec;
     SUsec = usage.ru_stime.tv_usec;
+#ifdef __APPLE__
+    MaxRSS = usage.ru_maxrss / 1024.0;
+#else
     MaxRSS = usage.ru_maxrss;
+#endif
     MinFlt = usage.ru_minflt;
     MajFlt = usage.ru_majflt;
     InBlock = usage.ru_inblock;
